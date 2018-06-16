@@ -38,7 +38,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         // Do any additional setup after loading the view, typically from a nib.
         checkLocationAuthorizationStatus()
         locationManager.delegate = self
-        //locationManager.desiredAccuracy = kCLLocationAccuracyBest // Mejorar gps
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest // Mejorar gps
         locationManager.allowsBackgroundLocationUpdates = true // Permitir actualizar con app desc
         locationManager.requestLocation()
         locationManager.startUpdatingLocation()
@@ -170,7 +170,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         heading_toSend = UInt8(0)
         
         if let location = locations.first {
-            speed_toSend = UInt8(location.speed / 100.0)
+            speed_toSend = UInt8(location.speed *  3600 / 100.0) // m/s to km/h
             if nav_option.selectedSegmentIndex == 0 {
                 if steps_nav.count > 0 {
                     navigation_text.text = steps_nav[step_count].instructions
@@ -195,8 +195,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                     }
                     distance_toSend = UInt8(distance)
                     heading_toSend = getHeading(myPos: location, point: next)
-                    if distance < 15 {
-                        print("AQUI")
+                    if distance < 5 {
                         step_count = step_count + 1
                         if step_count > points.count {
                             step_count = step_count - 1
